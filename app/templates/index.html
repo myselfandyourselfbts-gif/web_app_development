@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-9 col-lg-7">
+        
+        <!-- Add Task Card -->
+        <div class="card shadow-sm border-0 rounded-4 mb-4">
+            <div class="card-body p-4">
+                <form action="{{ url_for('tasks.create_task') }}" method="POST" class="d-flex gap-2">
+                    <input type="text" name="title" class="form-control form-control-lg bg-light border-0" placeholder="準備做些什麼呢？" required autofocus>
+                    <button type="submit" class="btn btn-primary px-4 fw-medium shadow-sm">新增</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Task List -->
+        <h5 class="fw-bold mb-3 text-secondary ms-2 mt-4">待辦清單</h5>
+        
+        {% if tasks %}
+            <div class="list-group shadow-sm rounded-4 border-0 mb-5">
+                {% for task in tasks %}
+                    <div class="list-group-item d-flex align-items-center justify-content-between p-3 py-4 border-0 border-bottom {{ 'bg-light text-muted opacity-75' if task.completed else '' }}">
+                        <div class="d-flex align-items-center gap-3 w-100 me-3">
+                            <!-- Toggle Status Form -->
+                            <form action="{{ url_for('tasks.toggle_task', task_id=task.id) }}" method="POST" class="m-0">
+                                <button type="submit" class="btn btn-link p-0 text-decoration-none" title="切換狀態">
+                                    {% if task.completed %}
+                                        <span class="fs-4 text-success">☑</span>
+                                    {% else %}
+                                        <span class="fs-4 text-secondary opacity-50">☐</span>
+                                    {% endif %}
+                                </button>
+                            </form>
+                            
+                            <!-- Task Title -->
+                            <span class="flex-grow-1 fw-medium {{ 'text-decoration-line-through text-muted' if task.completed else 'text-dark' }}" style="font-size: 1.15rem;">
+                                {{ task.title }}
+                            </span>
+                        </div>
+                        
+                        <!-- Actions -->
+                        <div class="d-flex gap-2 opacity-75">
+                            <a href="{{ url_for('tasks.edit_task', task_id=task.id) }}" class="btn btn-sm btn-outline-secondary rounded-3 px-3">編輯</a>
+                            <form action="{{ url_for('tasks.delete_task', task_id=task.id) }}" method="POST" class="m-0" onsubmit="return confirm('確定要刪除這筆任務嗎？');">
+                                <button type="submit" class="btn btn-sm btn-outline-danger rounded-3 px-3">刪除</button>
+                            </form>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <!-- 無資料呈現 (Empty State) -->
+            <div class="text-center py-5 text-muted mt-5">
+                <div class="display-1 mb-3 opacity-25">🎯</div>
+                <p class="fs-5">目前沒有任何任務，準備開始為新的工作規劃吧！</p>
+            </div>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

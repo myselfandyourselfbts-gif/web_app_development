@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-7 col-lg-5">
+        <div class="card shadow-sm border-0 rounded-4">
+            <div class="card-header bg-white border-0 py-3 pt-4">
+                <h4 class="mb-0 fw-bold text-center">編輯任務</h4>
+            </div>
+            <div class="card-body p-4 pt-1">
+                <form action="{{ url_for('tasks.update_task', task_id=task.id) }}" method="POST">
+                    <div class="mb-4">
+                        <label for="title" class="form-label text-muted fw-medium fs-6 ms-1">任務名稱</label>
+                        <!-- 使用預設值填寫原來的標題 -->
+                        <input type="text" class="form-control form-control-lg bg-light border-0" id="title" name="title" value="{{ task.title }}" required autofocus>
+                    </div>
+                    
+                    <div class="d-flex gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg flex-grow-1 shadow-sm fw-medium">儲存變更</button>
+                        <a href="{{ url_for('tasks.index') }}" class="btn btn-light btn-lg flex-grow-1 fw-medium text-secondary">取消並返回</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
